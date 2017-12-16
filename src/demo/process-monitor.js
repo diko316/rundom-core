@@ -16,9 +16,6 @@ function demo1() {
         task2 = monitor.add();
 
 
-
-
-
     function innerRun() {
         //console.log('inner');
     }

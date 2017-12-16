@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "joqx": "0.0.2",
+    "libcore-package-resolver": "0.0.7",
     "libcore": "^0.3.8",
     "libcore-parser-lalr": "^0.2.2",
     "libdom": "^0.5.7",
