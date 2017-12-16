@@ -1,0 +1,60 @@
+{
+  "name": "@rundom/core",
+  "version": "0.0.1",
+  "description": "Core modules for @rundom package",
+  "main": "dist/core.js",
+  "module": "dist/core.es.js",
+  "jsnext:main": "dist/core.es.js",
+  "scripts": {
+    "sync": "auto-sync",
+    "pretest": "npm run sync",
+    "test": "node_modules/.bin/karma start karma.config.js",
+    "test1": "node_modules/.bin/karma start --single-run karma.config.js",
+    "prestart": "npm run sync",
+    "start": "export BUILD=devel && gulp",
+    "prebuild": "npm run sync && npm run test1",
+    "build": "node_modules/.bin/rollup -c --environment BUILD:production",
+    "postbuild": "npm run build-optimized && bin/sync-builds.sh",
+    "build-optimized": "node_modules/.bin/rollup -c --environment BUILD:compressed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://diko316@github.com/diko316/rundom-core.git"
+  },
+  "keywords": [
+    "RunDOM",
+    "libcore",
+    "libdom"
+  ],
+  "author": "Diko Tech Slave",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diko316/rundom-core/issues"
+  },
+  "homepage": "https://github.com/diko316/rundom-core#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "jasmine-core": "^2.8.0",
+    "karma": "^1.7.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-rollup-preprocessor": "^5.0.2",
+    "rollup": "^0.52.1",
+    "rollup-plugin-buble": "^0.18.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1"
+  },
+  "dependencies": {
+    "joqx": "0.0.2",
+    "libcore": "^0.3.8",
+    "libcore-parser-lalr": "^0.2.2",
+    "libdom": "^0.5.7",
+    "libdom-http": "^0.2.7"
+  }
+}

@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+
+  server:
+    build: .
+    image: rundom-core
+    container_name: "rundom-core-test"
+    hostname: rundom-core
+    command: npm start
+
+    volumes:
+     - .:/opt/app-source:ro
+
+    ports:
+      - "3000:3000"
+  test:
+    image: joqx
+    container_name: "rundom-core-tester"
+    command: xvfb-run npm test
+
+    volumes:
+     - .:/opt/app-source:ro
+
+  build:
+    image: rundom-core
+    container_name: "rundom-core-builder"
+    command: xvfb-run npm build
+    
+    environment:
+     - SOURCE_MOD_PATH=/opt/app-source-modification
+  
+    volumes:
+      - ./docs:/opt/app/docs
+      - ./dist:/opt/app/dist
+      - .:/opt/app-source:ro
+      - .:/opt/app-source-modification:rw
+
+
+      
+
+
