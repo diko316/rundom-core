@@ -1,2 +1,2 @@
-# rundom-processor
-Processor used for @rundom package
+# rundom-core
+Core modules for @rundom package
