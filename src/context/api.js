@@ -2,24 +2,24 @@
 
 import { each } from 'libcore';
 
-import './platform.js';
-
 import { Declaration } from '../package/api.js';
 
-import { ContextNode } from './node.js';
+import { ContextRoot } from './root.js';
 
 export
-    function createContext() {
+    function createRootContext() {
         var dependencies = {},
-            instance = Declaration.instantiate(ContextNode,
-                                                '$$self',
-                                                dependencies);
+            node = Declaration.instantiate(ContextRoot,
+                                            '$$self',
+                                            dependencies);
         
         each(dependencies,
-            instance => instance.constructor(),
+            instance => instance !== node && instance.constructor(),
             true);
 
+        node.constructor();
+
         // run constructor
-        return instance;
+        return node;
 
     }

@@ -38,6 +38,19 @@ export class ProcessTask extends Node {
         super.onDestroy();
     }
 
+    onAdd(child) {
+        super.onAdd(child);
+
+        this.monitor.event.broadcast('add', child);
+    }
+
+    onRemove(child) {
+
+        this.monitor.event.broadcast('remove', child);
+
+        super.onRemove(child);
+    }
+
     onProcess(requestReprocess) {
         this.event.broadcast('process', requestReprocess);
     }

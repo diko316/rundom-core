@@ -1,6 +1,10 @@
 'use strict';
 
-import { createContext } from '../context/api.js';
+import { createRootContext } from '../context/api.js';
+
+var root = createRootContext();
+
+console.log('context: ', root);
 
 
-console.log('context: ', createContext());
+root.addChild();

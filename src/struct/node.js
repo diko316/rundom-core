@@ -133,6 +133,8 @@ export class Node {
             throw new Error('Invalid [node] to remove.');
         }
 
+        this.onRemove(node);
+
         before = node.before;
         after = node.after;
 
@@ -150,7 +152,9 @@ export class Node {
             me.last = before;
         }
 
-        this.onRemove(node);
+        node.parent = 
+            node.after = 
+            node.before = null;
 
         return node;
 

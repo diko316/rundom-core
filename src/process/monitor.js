@@ -238,5 +238,9 @@ export class ProcessMonitor extends Node {
         return this;
     }
 
+    subscribe(type, handler) {
+        return this.event.subscribe(type, handler);
+    }
+
 
 }

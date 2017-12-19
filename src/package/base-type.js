@@ -134,6 +134,10 @@ export
             var mergers = this.mergers;
             var c, l;
 
+            if (this.finalized) {
+                throw new Error('Finalized type is not reconfigurable.');
+            }
+
             // configure
             if (object(config)) {
                 for (c = -1, l = mergers.length; l--;) {
@@ -146,8 +150,10 @@ export
 
         finalize() {
             if (!this.finalized) {
-                this.finalized = true;
+                
                 this.onFinalize();
+
+                this.finalized = true;
             }
         }
 
