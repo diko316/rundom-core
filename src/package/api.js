@@ -7,3 +7,4 @@ export { PackageBaseType as BaseType } from './base-type.js';
 
 export const    Declaration = new PackageDeclaration(),
                 TypeRegistry = Declaration.packageType;
+

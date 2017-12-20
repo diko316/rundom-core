@@ -102,66 +102,66 @@ export
 
         }
 
-        instantiate(Class, name, dependencies) {
-            var definition, instance, customDependency,
-                completeParams,
-                requires, names, requireInstance, property, c, l;
-
-            // validate parameters and finalize use case
+        instantiate(Class, factoryName, factory) {
+            var dependency, dependencyClass, dependencies, name, names, c, l,
+                definition, instance;
 
             if (!method(Class)) {
                 throw new Error('Invalid instance [Class] parameter.');
             }
 
-            if (!string(name)) {
-                if (name !== null && name !== undefined) {
-                    throw new Error('Invalid property [name] parameter.');
-                }
-                name = null;
+            if (!string(factoryName)) {
+                factoryName = null;
             }
 
-            customDependency = object(dependencies);
-
-            completeParams = name && customDependency;
-
-            // create instance not attached to dependencies
-            if (completeParams && contains(dependencies, name)) {
-                return dependencies[name];
+            if (!object(factory)) {
+                factory = {};
             }
             
-            definition = this.getDefinition(Class);
 
+            definition = this.getDefinition(Class);
             instance = createObject(Class);
 
-            // attach to dependency
-            if (!customDependency) {
-                dependencies = {};
-            }
-            if (name) {
-                dependencies[name] = instance;
+            if (factoryName) {
+                factory[factoryName] = instance;
             }
 
-            // process instance
-            definition.onInstantiate(instance);
-
-            // for service instantiation
+            // populate properties
             if (definition) {
+                dependencies = definition.getDependencies();
                 names = definition.getDependencyNames();
-                requires = definition.getDependencies();
 
                 for (c = -1, l = names.length; l--;) {
-                    property = names[++c];
-                    instance[property] = 
-                        requireInstance = this.instantiate(requires[property],
-                                                            property,
-                                                            dependencies);
-                }
+                    name = names[++c];
+                    dependencyClass = dependencies[name];
 
+                    if (contains(factory, name)) {
+                        dependency = factory[name];
+
+                        // do not recreate
+                        if (dependency instanceof dependencyClass) {
+                            return dependency;
+                        }
+                        
+                        throw new Error('dependency conflict found ' +
+                                    dependencyClass.name +
+                                    ' when used as ' + name +
+                                    ' property of ' +
+                                    Class.name);
+
+                    }
+
+                    dependency = this.instantiate(dependencies[name],
+                                                    name,
+                                                    factory);
+
+                    instance[name] = dependency[0];
+
+                }
             }
 
-            return instance;
+            return [instance, factory];
 
         }
-
 
     }

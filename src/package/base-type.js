@@ -14,6 +14,8 @@ import {
 const   hasOwn = Object.prototype.hasOwnProperty,
         MERGE_NAME_RE = /^onMerge([A-Z][a-zA-Z]*)$/;
 
+console.log('used each ', each.toString());
+
 function createMerger(value, name, instance) {
     var match, list, access;
 
@@ -46,6 +48,8 @@ export
     class PackageBaseType {
 
         constructor(Class) {
+
+            var create = createMerger;
             
             this.id = getClassTag(Class);
             this.target = Class;
@@ -59,7 +63,9 @@ export
 
             Class.prototype.$$initialized = false;
 
-            each(this, createMerger);
+            for (var name in this) {
+                create(this[name], name, this);
+            }
 
         }
 
@@ -81,35 +87,34 @@ export
 
             if (isObject(value)) {
 
-                if (!isObject(config)) {
-                    this.config = 
-                        config = {};
-                }
-
                 repo = config.requires;
                 if (!isObject(repo)) {
-                    config.requires =
-                        repo = {};
+                    config.requires = repo = {};
                 }
+
+                console.log('requires? ', repo);
 
                 each(value,
                     (value, name) => {
-                        var requires = repo,
+                        var dependencies = this.requires,
                             names = this.requireNames;
 
+                        // update config
+                        repo[name] = value;
+                        
+
                         if (value === false) {
-                            delete requires[name];
+                            delete dependencies[name];
+                            
+
                         }
                         else if (method(value)) {
 
-                            tagClass(value);
-
-                            if (!hasOwn.call(requires, name)) {
+                            if (!hasOwn.call(dependencies, name)) {
                                 names[names.length] = name;
                             }
 
-                            requires[name] = value;
-
+                            dependencies[name] = value;
 
                         }
 
@@ -138,8 +143,11 @@ export
                 throw new Error('Finalized type is not reconfigurable.');
             }
 
+            console.log('merge config! ', config, mergers);
+
             // configure
             if (object(config)) {
+
                 for (c = -1, l = mergers.length; l--;) {
                     mergers[++c](config);
                 }
